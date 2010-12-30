@@ -18,7 +18,7 @@
 
 <schema name="default" version="1.1">
   <types>
-  {% block fieldtypes %}
+  {% block field_types %}
     <fieldtype name="string"  class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true"/>
 
