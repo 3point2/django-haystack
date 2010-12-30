@@ -18,6 +18,7 @@
 
 <schema name="default" version="1.1">
   <types>
+  {% block fieldtypes %}
     <fieldtype name="string"  class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true"/>
 
@@ -60,9 +61,12 @@
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
       </analyzer>
     </fieldType>
+  {% endblock %}
   </types>
 
-  <fields>   
+
+  <fields>
+  {% block fields %}
     <!-- general -->
     <field name="{{ ID }}" type="string" indexed="true" stored="true" multiValued="false" required="true"/>
     <field name="{{ DJANGO_CT }}" type="string" indexed="true" stored="true" multiValued="false" />
@@ -76,10 +80,11 @@
     <dynamicField name="*_f"  type="sfloat"  indexed="true"  stored="true"/>
     <dynamicField name="*_d"  type="sdouble" indexed="true"  stored="true"/>
     <dynamicField name="*_dt" type="date"    indexed="true"  stored="true"/>
-    
+
 {% for field in fields %}
     <field name="{{ field.field_name }}" type="{{ field.type }}" indexed="{{ field.indexed }}" stored="{{ field.stored }}" multiValued="{{ field.multi_valued }}" />
 {% endfor %}
+  {% endblock %}
   </fields>
 
   <!-- field to use to determine and enforce document uniqueness. -->
@@ -90,5 +95,7 @@
 
   <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
   <solrQueryParser defaultOperator="{{ default_operator }}" />
-</schema>
 
+  {% block extra_config %}
+  {% endblock %}
+</schema>
