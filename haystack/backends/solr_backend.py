@@ -338,7 +338,7 @@ class SearchBackend(BaseSearchBackend):
                 field_data['type'] = 'boolean'
             elif field_class.field_type == 'location':
                 field_data['type'] = 'location'
-            
+
             if field_class.is_multivalued:
                 field_data['multi_valued'] = 'true'
 
@@ -455,6 +455,9 @@ class SearchQuery(BaseSearchQuery):
 
         if self.narrow_queries:
             kwargs['narrow_queries'] = self.narrow_queries
+
+        if self.spatial:
+            kwargs['vasili'] = "hello"
 
         if spelling_query:
             kwargs['spelling_query'] = spelling_query
