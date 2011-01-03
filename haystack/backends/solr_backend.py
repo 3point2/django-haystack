@@ -109,7 +109,7 @@ class SearchBackend(BaseSearchBackend):
     def search(self, query_string, sort_by=None, start_offset=0, end_offset=None,
                fields='', highlight=False, facets=None, date_facets=None, query_facets=None,
                narrow_queries=None, spelling_query=None,
-               limit_to_registered_models=None, **kwargs):
+               limit_to_registered_models=None, spatial=None, **kwargs):
         if len(query_string) == 0:
             return {
                 'results': [],
@@ -135,6 +135,11 @@ class SearchBackend(BaseSearchBackend):
         if highlight is True:
             kwargs['hl'] = 'true'
             kwargs['hl.fragsize'] = '200'
+
+        if spatial is not None:
+            kwargs['pt'] = spatial['point']
+            kwargs['d'] = spatial['distance']
+            kwargs['sfield'] = spatial['location_field'].index_fieldname
 
         if getattr(settings, 'HAYSTACK_INCLUDE_SPELLING', False) is True:
             kwargs['spellcheck'] = 'true'
@@ -181,7 +186,6 @@ class SearchBackend(BaseSearchBackend):
 
             if len(registered_models) > 0:
                 narrow_queries.add('%s:(%s)' % (DJANGO_CT, ' OR '.join(registered_models)))
-
         if narrow_queries is not None:
             kwargs['fq'] = list(narrow_queries)
 
@@ -453,11 +457,13 @@ class SearchQuery(BaseSearchQuery):
         if self.query_facets:
             kwargs['query_facets'] = self.query_facets
 
+        if self.spatial:
+            spatial_filter = getattr(settings, 'HAYSTACK_SOLR_SPATIAL_FILTER', 'geofilt')
+            self.add_narrow_query("{!%s}" % spatial_filter)
+            kwargs['spatial'] = self.spatial
+
         if self.narrow_queries:
             kwargs['narrow_queries'] = self.narrow_queries
-
-        if self.spatial:
-            kwargs['vasili'] = "hello"
 
         if spelling_query:
             kwargs['spelling_query'] = spelling_query
