@@ -8,7 +8,7 @@ from django.db.models.base import ModelBase
 from django.utils import tree
 from django.utils.encoding import force_unicode
 from haystack.constants import ID, DJANGO_CT, DJANGO_ID, VALID_FILTERS, FILTER_SEPARATOR
-from haystack.exceptions import SearchBackendError, MoreLikeThisError, FacetingError, FieldError
+from haystack.exceptions import SearchBackendError, MoreLikeThisError, FacetingError, SearchFieldError
 from haystack import site
 try:
     set
@@ -640,7 +640,7 @@ class BaseSearchQuery(object):
         if location_field is None:
             location_field = site.get_location_field()
             if location_field is None:
-                raise FieldError("Couldn't find a LocationField")
+                raise SearchFieldError("Couldn't find a LocationField")
         self.spatial["point"] = point
         self.spatial["distance"] = distance
         self.spatial["location_field"] = location_field
