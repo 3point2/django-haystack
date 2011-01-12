@@ -125,6 +125,15 @@ Examples::
 The default is 10 seconds.
 
 
+``HAYSTACK_SOLR_SPATIAL_FILTER``
+================================
+
+**Optional when using Solr 4.0 as backend**
+
+This setting determines the function used for spatial searching. Valid
+values are 'bbox' and 'geofilt'. See http://wiki.apache.org/solr/SpatialSearch
+
+
 ``HAYSTACK_WHOOSH_PATH``
 ========================
 
@@ -255,7 +264,7 @@ Default is ``True``.
     yield no results. You can manually import your ``SearchIndex`` classes in
     other files (like your views or elsewhere). In short, Haystack will still
     be available but essentially in an un-initialized state.
-    
+
     You should ONLY use this setting if you're using another third-party
     application that causes tracebacks/import errors when used in conjunction
     with Haystack.
