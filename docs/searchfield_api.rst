@@ -30,6 +30,7 @@ Included with Haystack are the following field types:
 * ``DateTimeField``
 * ``FloatField``
 * ``IntegerField``
+* ``LocationField``
 * ``MultiValueField``
 
 And equivalent faceted versions:
@@ -40,6 +41,7 @@ And equivalent faceted versions:
 * ``FacetDateTimeField``
 * ``FacetFloatField``
 * ``FacetIntegerField``
+* ``FacetLocationField``
 * ``FacetMultiValueField``
 
 
@@ -52,8 +54,8 @@ fields in ``django.forms.Form`` or ``django.db.models.Model`` objects. For
 example::
 
     from haystack.indexes import *
-    
-    
+
+
     class NoteIndex(SearchIndex):
         text = CharField(document=True, use_template=True)
         author = CharField(model_attr='user')
